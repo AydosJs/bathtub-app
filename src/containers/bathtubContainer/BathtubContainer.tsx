@@ -1,12 +1,12 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import MainContainer from "../../layout/MainContainer";
-import { IBathtub } from "../../store/bathtub/bathtubSlice";
+import { IBathtubType } from "../../store/bathtubType/bathtubTypeSlice";
 import { RootState } from "../../store/Store";
 import BathtubCardList from "./BathtubCard";
 
 function BathtubContainer() {
-  const { bathtub } = useSelector((state: RootState) => state.bathtub);
+  const { bathtubTypes } = useSelector((state: RootState) => state.bathtubType);
 
   return (
     <MainContainer >
@@ -16,11 +16,11 @@ function BathtubContainer() {
       </h1>
 
       <div className="grid grid-cols-4 gap-4">
-        {bathtub.length !== 0 && bathtub.map((item: IBathtub, index: number) => (
+        {bathtubTypes.length !== 0 && bathtubTypes.map((item: IBathtubType, index: number) => (
           <BathtubCardList item={item} />
         ))}
 
-        <Link to="/create/bathtub">
+        <Link to="/bathtub-making">
           <div className="opacity-50 hover:opacity-100 flex items-center border-2 border-gray-400 border-dashed justify-center rounded p-4 text-center min-h-[114px]">
             <p className="text-2xl font-semibold">
               +

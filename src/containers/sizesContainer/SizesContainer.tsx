@@ -1,17 +1,18 @@
+import dayjs from "dayjs";
 import { useSelector } from "react-redux";
-import MainContainer from "../../../layout/MainContainer"
-import { RootState } from "../../../store/Store";
-import CreateBathtubFrom from "./CreateBathtubFrom";
-import { IBathtubType } from "../../../store/bathtubType/bathtubTypeSlice";
-import dayjs from 'dayjs'
+import MainContainer from "../../layout/MainContainer"
+import { IBathtubSizes } from "../../store/bathtubType/bathtubTypeSlice";
+import { RootState } from "../../store/Store";
+import CreateSizes from "./sizes-save/CreateSizes"
 
-function BathtubListContainer() {
-  const { bathtubTypes } = useSelector((state: RootState) => state.bathtubType);
-  console.log("bathtub list", bathtubTypes)
+function SizesContainer() {
+
+  const { bathtubSizes } = useSelector((state: RootState) => state.bathtubType);
 
   return (
-    <MainContainer>
+    <MainContainer >
       <div className="flex flex-row space-x-4 items-start">
+
         {/* LIST */}
         <div className="basis-4/6 bg-white p-4 flex flex-col">
 
@@ -21,34 +22,23 @@ function BathtubListContainer() {
               #
             </p>
             <p className="w-1/2 text-sm font-medium ">
-              Name
+              Size
             </p>
-            {/* <p className="w-1/2 text-sm font-medium ">
-              Sizes
-            </p> */}
             <p className="min-w-40 max-w-40 w-40 text-sm font-medium ">
               Created at
             </p>
           </div>
 
           {/* Items */}
-          {bathtubTypes.length !== 0 ? bathtubTypes.map((item: IBathtubType, index: number) => (
+          {bathtubSizes.length !== 0 ? bathtubSizes.map((item: IBathtubSizes, index: number) => (
             <div key={index} className="group flex flex-row items-center justify-around border-b px-2 py-4 last:border-none hover:cursor-pointer hover:bg-gray-100">
               <p className="min-w-10 max-w-12 w-10 text-sm font-medium text-gray-300 group-hover:text-gray-900">
                 {index}
               </p>
               <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
-                {item.title}
+                {item.size}
               </p>
-              {/* <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
-                <div className="flex flex-row gap-2 flex-wrap">
-                  {item.bathtubSizes.length !== 0 && item.bathtubSizes.map((item: IBathtubSizes) => (
-                    <p className="px-1.5 py-0.5 border rounded-full text-xs">
-                      {item.size}
-                    </p>
-                  ))}
-                </div>
-              </p> */}
+
               <p className="w-40 text-sm font-medium text-gray-500 group-hover:text-gray-900">
                 {dayjs(
                   item?.createdAt
@@ -59,12 +49,14 @@ function BathtubListContainer() {
           )) : <p className="w-full text-sm font-medium text-gray-300 text-center align-center p-10">There is nothing !</p>}
 
         </div>
+
+        {/* RAW MATERIALS CRUD */}
         <div className="basis-2/6 bg-white p-4">
-          <CreateBathtubFrom />
+          <CreateSizes />
         </div>
       </div>
     </MainContainer>
   )
 }
 
-export default BathtubListContainer
+export default SizesContainer

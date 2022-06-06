@@ -8,6 +8,12 @@ import { createMaterial, IMaterial } from '../../../store/rawMaterials/rawMateri
 import { RootState } from '../../../store/Store';
 import { IUnitsMeasurement } from '../../../store/unitsMeasurement/unitsMeasurement';
 
+export const slectionColourStyles: any = {
+  control: (styles: any) => ({ ...styles, height: '42px', borderColor: "#e5e7eb", overFlow: 'hidden' }),
+  menu: (styles: any) => ({ ...styles, fontSize: '0.875rem', }),
+  placeholder: (styles: any) => ({ ...styles, fontSize: '0.875rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }),
+};
+
 export default function CreateRawMaterials() {
   const dispatch = useDispatch()
   const { unitsMeasurement } = useSelector((state: RootState) => state.unitsMeasurments);
@@ -48,7 +54,7 @@ export default function CreateRawMaterials() {
     // console.log("SATRTED VALUE", values)
     dispatch(createMaterial({
       id: String(Date.now()),
-      createAt: String(new Date()),
+      createdAt: String(new Date()),
       ...values,
     }))
     setInitialValues({
@@ -56,7 +62,6 @@ export default function CreateRawMaterials() {
       measurement: values.measurement,
       currency: values.currency,
     })
-    console.log("FINAL VALUE", values)
   };
 
   const formik = useFormik<IMaterial>({
@@ -65,14 +70,6 @@ export default function CreateRawMaterials() {
     validationSchema,
     onSubmit
   });
-
-
-  const slectionColourStyles: any = {
-    control: (styles: any) => ({ ...styles, height: '42px', borderColor: "#e5e7eb", overFlow: 'hidden' }),
-    menu: (styles: any) => ({ ...styles, fontSize: '0.875rem', }),
-    placeholder: (styles: any) => ({ ...styles, fontSize: '0.875rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }),
-  };
-
 
 
   return (

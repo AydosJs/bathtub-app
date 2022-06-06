@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export interface IUnitsMeasurement {
-  id?: number,
+  id?: string,
   name: string,
   symbol: string,
   createdAt?: string
@@ -15,16 +15,22 @@ export interface IUnitsMeasurmentState {
 const initialState: IUnitsMeasurmentState = {
   unitsMeasurement: [
     {
-      id: 1,
-      name: "Meter",
-      symbol: "m",
-      createdAt: '2022'
+      createdAt: "Mon Jun 06 2022 21:49:27 GMT+0500 (Uzbekistan Standard Time)",
+      id: "1654534167887",
+      name: "Kilogram",
+      symbol: "kg"
     },
     {
-      id: 2,
-      name :"Kilogram",
-      symbol: "kg",
-      createdAt: '2022'
+      createdAt: "Mon Jun 06 2022 21:48:55 GMT+0500 (Uzbekistan Standard Time)",
+      id: "1654534135730",
+      name: "Meter",
+      symbol: "mt"
+    },
+    {
+      createdAt: "Mon Jun 06 2022 21:49:55 GMT+0500 (Uzbekistan Standard Time)",
+      id: "1654534195686",
+      name: "Litr",
+      symbol: "lt"
     }
   ],
   isLoading: false

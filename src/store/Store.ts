@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { bathtubReducer } from './bathtub/bathtubSlice'
+import { bathtubMakingReducer } from './bathTubMaking/bathTubMaking'
+import {  bathtubTypeReducer } from './bathtubType/bathtubTypeSlice'
 import { materialReduser } from './rawMaterials/rawMaterialsSlice'
 import { unitsMeasurment } from './unitsMeasurement/unitsMeasurement'
 
@@ -7,7 +8,8 @@ export const store = configureStore({
   reducer: {
     rawMaterials: materialReduser,
     unitsMeasurments: unitsMeasurment,
-    bathtub: bathtubReducer
+    bathtubType: bathtubTypeReducer,
+    bathtubMaking: bathtubMakingReducer
   },
 })
 

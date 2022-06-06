@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom"
-import { IBathtub, IBathtubSizes } from "../../store/bathtub/bathtubSlice"
+import { IBathtubType, IBathtubSizes } from "../../store/bathtubType/bathtubTypeSlice"
 
 type Props = {
-  item: IBathtub
+  item: IBathtubType
 }
 
 function BathtubCard({ item }: Props) {
@@ -17,13 +17,13 @@ function BathtubCard({ item }: Props) {
 
         <div className="w-full rounded-full border-b-4 border-gray-50 "></div>
 
-        <div className="w-full flex flex-row flex-wrap gap-1">
+        {/* <div className="w-full flex flex-row flex-wrap gap-1">
           {item?.bathtubSizes?.map((item: IBathtubSizes) => (
             <p className="bg-white px-1.5 py-0.5 rounded-full border text-xs font-middle">
               {item?.size}
             </p>
           ))}
-        </div>
+        </div> */}
       </div>
     </Link>
   )

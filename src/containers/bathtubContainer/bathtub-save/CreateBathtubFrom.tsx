@@ -1,53 +1,59 @@
 import { useState } from "react";
 import { FieldArray, FormikProvider, useFormik } from "formik";
 import * as Yup from 'yup';
-import { createBathtub, IBathtub } from "../../../store/bathtub/bathtubSlice";
-import { useDispatch } from "react-redux";
+import { createBathtub, IBathtubType, IBathtubSizes } from "../../../store/bathtubType/bathtubTypeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import Select from 'react-select';
+import { RootState } from "../../../store/Store";
+
 
 export default function CreateBathtubFrom() {
   const dispatch = useDispatch()
-  const [sizesInput, setSizesInput] = useState('')
-  const sizeMatch = /\d{2,3}x\d{2,3}/
-  const [sizeMatchError, setSizeMatchError] = useState({
-    error: false,
-    message: ''
-  })
+  const { bathtubSizes } = useSelector((state: RootState) => state.bathtubType);
 
-  const bindError = (msg: string) => {
-    setSizeMatchError({
-      error: true,
-      message: msg
-    })
-  }
+  // const [sizesInput, setSizesInput] = useState('')
+  // const sizeMatch = /^\d{2,3}x\d{2,3}/
+  // const [sizeMatchError, setSizeMatchError] = useState({
+  //   error: false,
+  //   message: ''
+  // })
 
-  const formik = useFormik<IBathtub>({
+  // const bindError = (msg: string) => {
+  //   setSizeMatchError({
+  //     error: true,
+  //     message: msg
+  //   })
+  // }
+
+  const formik = useFormik<IBathtubType>({
     initialValues: {
       title: '',
-      bathtubSizes: []
+      // bathtubSizes: []
     },
     enableReinitialize: true,
     validationSchema: Yup.object({
       title: Yup.string().required('Title is required'),
-      bathtubSizes: Yup.array().min(1, 'YOU MUST ADD AT LEAST ONE SZIE !').of(Yup.object().shape({
-        size: Yup.string().matches(sizeMatch, 'Size format didnt matche').required('Required')
-      }))
+      // bathtubSizes: Yup.array().min(1, 'YOU MUST ADD AT LEAST ONE SZIE !').of(Yup.object().shape({
+      //   size: Yup.string().matches(sizeMatch, 'Size format didnt matche').required('Required')
+      // }))
     }),
-    onSubmit: (values: IBathtub) => {
+    onSubmit: (values: IBathtubType) => {
       console.log("BATHTUB FINAL VALUE", values)
       dispatch(createBathtub({
         id: String(Date.now()),
-        createAt: String(new Date()),
+        createdAt: String(new Date()),
         ...values,
       }))
       formik.resetForm()
     }
   });
 
+
   return (
     <form className="bg-white flex flex-col space-y-2" onSubmit={formik.handleSubmit}>
       {/* Name */}
       <div className="">
-        <label htmlFor="title" className=" block py-3 text-sm font-medium ">Bathtub title</label>
+        <label htmlFor="title" className=" block py-3 text-sm font-medium ">Bathtub type</label>
         <input
           name="title"
           id="title"
@@ -55,7 +61,7 @@ export default function CreateBathtubFrom() {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.title}
-          placeholder="glue"
+          placeholder="Corner bath"
           className="border text-sm rounded block w-full p-2.5" />
         {formik.errors.title && formik.touched.title &&
           <p className='text-sm text-red-500 mt-2 font-medium'>
@@ -64,7 +70,8 @@ export default function CreateBathtubFrom() {
         }
       </div>
 
-      {/* Sizes */}
+
+      {/* Sizes
       <div className="">
         <FormikProvider value={formik}>
           <FieldArray
@@ -98,16 +105,7 @@ export default function CreateBathtubFrom() {
                   <div className="flex flex-row space-x-2">
                     <input
                       type="text"
-                      // onKeyUp={(e) => (e?.keyCode == 13 && sizesInput.length !== 0 && sizesInput.match(sizeMatch)) ? (
-                      //   arrayHelpers.push({ id: String(Date.now()), size: sizesInput, createdAt: String(new Date()) }),
-                      //   setSizesInput(''),
-                      // setSizeMatchError({
-                      //   error: false,
-                      //   message: ''
-                      // })
-                      // ) : null
-                      // }
-                      // onKeyUp={(e) => e?.keyCode == 13 ? false : null}
+
                       onChange={(e) => (
                         setSizesInput(e.target?.value),
                         setSizeMatchError({
@@ -149,7 +147,7 @@ export default function CreateBathtubFrom() {
             )}
           />
         </FormikProvider>
-      </div>
+      </div> */}
 
       {/* SAVE */}
       <div className=''>
@@ -161,3 +159,14 @@ export default function CreateBathtubFrom() {
     </form>
   )
 }
+
+  // onKeyUp={(e) => (e?.keyCode == 13 && sizesInput.length !== 0 && sizesInput.match(sizeMatch)) ? (
+                      //   arrayHelpers.push({ id: String(Date.now()), size: sizesInput, createdAt: String(new Date()) }),
+                      //   setSizesInput(''),
+                      // setSizeMatchError({
+                      //   error: false,
+                      //   message: ''
+                      // })
+                      // ) : null
+                      // }
+                      // onKeyUp={(e) => e?.keyCode == 13 ? false : null}

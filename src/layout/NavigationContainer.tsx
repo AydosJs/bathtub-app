@@ -13,18 +13,33 @@ function NavigationContainer() {
         <Link to="/" className={`${location?.pathname === '/' ? 'bg-gray-200' : 'hover:bg-gray-200 rounded'} p-2.5 py-3 text-sm font-medium  hover:bg-gray-200 rounded`}>
           Bathtub
         </Link>
-        <Link to="/raw-materials" className={`${location?.pathname === '/raw-materials' ? 'bg-gray-200' : 'hover:bg-gray-200 rounded'} p-2.5 py-3 text-sm font-medium  hover:bg-gray-200 rounded`}>
-          Raw materials
-        </Link>
-        <Link to="/unit-measurement" className={`${location?.pathname === '/unit-measurement' ? 'bg-gray-200' : 'hover:bg-gray-200 rounded'} p-2.5 py-3 text-sm font-medium  hover:bg-gray-200 rounded`}>
-          Unit Measurement
-        </Link>
         <Link to="/" className={`${location?.pathname === '' ? 'bg-gray-200' : 'hover:bg-gray-200 rounded'} p-2.5 py-3 text-sm font-medium  hover:bg-gray-200 rounded`}>
           About
         </Link>
 
-      </nav>
-    </div>
+        <details open={true} className="">
+          <summary className={`${location?.pathname === '' ? 'bg-gray-200' : 'hover:bg-gray-200 rounded'} p-2.5 py-3 text-sm font-medium cursor-pointer hover:bg-gray-200 rounded`}>
+            Adim panel
+          </summary>
+
+          <div className="flex flex-col space-y-2 p-2">
+            <Link to="/create/bathtub" className={`${location?.pathname === '/create/bathtub' ? 'bg-gray-200' : 'hover:bg-gray-200 rounded'} p-2.5 py-3 text-sm font-medium  hover:bg-gray-200 rounded`}>
+              Baththub types
+            </Link>
+            <Link to="/sizes" className={`${location?.pathname === '/sizes' ? 'bg-gray-200' : 'hover:bg-gray-200 rounded'} p-2.5 py-3 text-sm font-medium  hover:bg-gray-200 rounded`}>
+              Sizes
+            </Link>
+            <Link to="/raw-materials" className={`${location?.pathname === '/raw-materials' ? 'bg-gray-200' : 'hover:bg-gray-200 rounded'} p-2.5 py-3 text-sm font-medium  hover:bg-gray-200 rounded`}>
+              Raw materials
+            </Link>
+            <Link to="/unit-measurement" className={`${location?.pathname === '/unit-measurement' ? 'bg-gray-200' : 'hover:bg-gray-200 rounded'} p-2.5 py-3 text-sm font-medium  hover:bg-gray-200 rounded`}>
+              Unit Measurement
+            </Link>
+
+          </div>
+        </details>
+      </nav >
+    </div >
   )
 }
 
