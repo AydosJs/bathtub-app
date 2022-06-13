@@ -13,7 +13,7 @@ function NavigationContainer() {
         <Link to="/" className={`${location?.pathname === '/' ? 'bg-gray-200' : 'hover:bg-gray-200 rounded'} p-2.5 py-3 text-sm font-medium  hover:bg-gray-200 rounded`}>
           Bathtub
         </Link>
-        <Link to="/" className={`${location?.pathname === '' ? 'bg-gray-200' : 'hover:bg-gray-200 rounded'} p-2.5 py-3 text-sm font-medium  hover:bg-gray-200 rounded`}>
+        <Link to="/about" className={`${location?.pathname === '/about' ? 'bg-gray-200' : 'hover:bg-gray-200 rounded'} p-2.5 py-3 text-sm font-medium  hover:bg-gray-200 rounded`}>
           About
         </Link>
 
@@ -24,16 +24,16 @@ function NavigationContainer() {
 
           <div className="flex flex-col space-y-2 p-2">
             <Link to="/create/bathtub" className={`${location?.pathname === '/create/bathtub' ? 'bg-gray-200' : 'hover:bg-gray-200 rounded'} p-2.5 py-3 text-sm font-medium  hover:bg-gray-200 rounded`}>
-              Baththub types
+              Create Baththub types
             </Link>
             <Link to="/sizes" className={`${location?.pathname === '/sizes' ? 'bg-gray-200' : 'hover:bg-gray-200 rounded'} p-2.5 py-3 text-sm font-medium  hover:bg-gray-200 rounded`}>
-              Sizes
+              Create Sizes
             </Link>
             <Link to="/raw-materials" className={`${location?.pathname === '/raw-materials' ? 'bg-gray-200' : 'hover:bg-gray-200 rounded'} p-2.5 py-3 text-sm font-medium  hover:bg-gray-200 rounded`}>
-              Raw materials
+              Create Raw materials
             </Link>
             <Link to="/unit-measurement" className={`${location?.pathname === '/unit-measurement' ? 'bg-gray-200' : 'hover:bg-gray-200 rounded'} p-2.5 py-3 text-sm font-medium  hover:bg-gray-200 rounded`}>
-              Unit Measurement
+              Create Unit Measurement
             </Link>
 
           </div>

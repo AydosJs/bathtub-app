@@ -5,10 +5,14 @@ import { IMaterial } from "../../store/rawMaterials/rawMaterialsSlice";
 import { RootState } from "../../store/Store";
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import { useState } from "react";
 
 
 function RawMaterialsContainer() {
   const { materials } = useSelector((state: RootState) => state.rawMaterials);
+
+  const [query, setQuery] = useState("");
+
   return (
     <MainContainer >
       <div className="flex flex-row space-x-4 items-start">
@@ -24,7 +28,9 @@ function RawMaterialsContainer() {
                 id="search"
                 type="text"
                 placeholder="Search..."
-                className="border  text-sm rounded block w-full p-2" />
+                className="border  text-sm rounded block w-full p-2"
+                onChange={(event) => setQuery(event.target.value)}
+              />
             </div>
             <div className="basis-1/2">
               date picker
@@ -56,26 +62,39 @@ function RawMaterialsContainer() {
           </div>
 
           {/* Items */}
-          {materials.length !== 0 ? materials.map((item: IMaterial, index: number) => (
-            <div key={index} className="group flex flex-row items-center justify-around border-b px-2 py-4 last:border-none hover:cursor-pointer hover:bg-gray-100">
-              <p className="min-w-10 max-w-12 w-10 text-sm font-medium text-gray-300 group-hover:text-gray-900">
-                {index}
-              </p>
-              <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
-                {item.title}
-              </p>
-              <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
-                {item.amount}&nbsp;
-                {item?.measurement?.symbol ? item?.measurement?.symbol : null}
-              </p>
-              <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
-                {item.measurement?.name}
-              </p>
-              <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
-                {item.prices?.formattedValue}
-              </p>
-            </div>
-          )) : <p className="w-full text-sm font-medium text-gray-300 text-center align-center p-10">There is nothing !</p>}
+          {materials.length !== 0 ?
+            materials
+              .filter((list: IMaterial) => {
+                if (query === "") {
+                  return list;
+                } else if (
+                  list?.title
+                    .toLowerCase()
+                    .includes(query.toLocaleLowerCase())
+                ) {
+                  return list;
+                }
+              })
+              .map((item: IMaterial, index: number) => (
+                <div key={index} className="group flex flex-row items-center justify-around border-b px-2 py-4 last:border-none hover:cursor-pointer hover:bg-gray-100">
+                  <p className="min-w-10 max-w-12 w-10 text-sm font-medium text-gray-300 group-hover:text-gray-900">
+                    {index}
+                  </p>
+                  <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
+                    {item.title}
+                  </p>
+                  <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
+                    {item.amount}&nbsp;
+                    {item?.measurement?.symbol ? item?.measurement?.symbol : null}
+                  </p>
+                  <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
+                    {item.measurement?.name}
+                  </p>
+                  <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
+                    {item.prices?.formattedValue}
+                  </p>
+                </div>
+              )) : <p className="w-full text-sm font-medium text-gray-300 text-center align-center p-10">There is nothing !</p>}
 
         </div>
 

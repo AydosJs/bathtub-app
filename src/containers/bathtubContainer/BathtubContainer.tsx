@@ -38,6 +38,9 @@ function BathtubContainer() {
     return totalPrice
   }
 
+  const [query, setQuery] = useState("");
+
+
   return (
     <MainContainer >
 
@@ -56,7 +59,9 @@ function BathtubContainer() {
               id="search"
               type="text"
               placeholder="Search..."
-              className="border text-sm rounded w-full p-2.5" />
+              className="border text-sm rounded w-full p-2.5"
+              onChange={(event) => setQuery(event.target.value)}
+            />
           </div>
           <div className="basis-1/6 ">
             <Link to="/bathtub-making">
@@ -95,45 +100,57 @@ function BathtubContainer() {
         </div>
 
         {/* Items */}
-        {bathtubs.length !== 0 ? bathtubs.map((item: IBathtub, index: number) => (
-          <Link to={`/bathtub/${item?.id}`}>
-            <div key={index} className="group flex flex-row items-center justify-around border-b px-2 py-4 last:border-none hover:cursor-pointer hover:bg-gray-100">
-              <p className="min-w-10 max-w-12 w-10 text-sm font-medium text-gray-300 group-hover:text-gray-900">
-                {index}
-              </p>
-              <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
-                {item?.type?.typeInfo?.title}
-              </p>
-              <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
-                {item?.type?.requiredAmount?.formattedValue}
-              </p>
-              <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
-                <div className="flex flex-row space-x-2 max-w-[216px] overflow-hidden">
-                  {item?.sizes?.map((item: IBathtubSizes, index: number) => index <= 2 ? <p key={index} className="p-0.5 group-hover:bg-white text-xs border rounded">{item?.size}</p> : null)}
-                </div>
-              </p>
-              <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
-                <NumberFormat
-                  displayType={'text'}
-                  thousandSeparator={true}
-                  prefix={'$'}
-                  className="text-sm font-medium text-gray-500 group-hover:text-gray-900"
-                  value={calculatePrice(item)?.usd} />
-              </p>
-              <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
-                <NumberFormat
-                  displayType={'text'}
-                  thousandSeparator={true}
-                  prefix={'UZS '}
-                  className="text-sm font-medium text-gray-500 group-hover:text-gray-900"
-                  value={calculatePrice(item).uzs} />
-              </p>
-              <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
-                {dayjs(item?.createdAt).format('MMMM D, YYYY')}
-              </p>
-            </div>
-          </Link>
-        )) : <p className="w-full text-sm font-medium text-gray-300 text-center align-center p-10">There is nothing !</p>}
+        {bathtubs.length !== 0 ? bathtubs
+          .filter((list: IBathtub) => {
+            if (query === "") {
+              return list;
+            } else if (
+              list?.type?.typeInfo?.title
+                .toLowerCase()
+                .includes(query.toLocaleLowerCase())
+            ) {
+              return list;
+            }
+          })
+          .map((item: IBathtub, index: number) => (
+            <Link to={`/bathtub/${item?.id}`}>
+              <div key={index} className="group flex flex-row items-center justify-around border-b px-2 py-4 last:border-none hover:cursor-pointer hover:bg-gray-100">
+                <p className="min-w-10 max-w-12 w-10 text-sm font-medium text-gray-300 group-hover:text-gray-900">
+                  {index}
+                </p>
+                <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
+                  {item?.type?.typeInfo?.title}
+                </p>
+                <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
+                  {item?.type?.requiredAmount?.formattedValue}
+                </p>
+                <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
+                  <div className="flex flex-row space-x-2 max-w-[216px] overflow-hidden">
+                    {item?.sizes?.map((item: IBathtubSizes, index: number) => index <= 2 ? <p key={index} className="p-0.5 group-hover:bg-white text-xs border rounded">{item?.size}</p> : null)}
+                  </div>
+                </p>
+                <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
+                  <NumberFormat
+                    displayType={'text'}
+                    thousandSeparator={true}
+                    prefix={'$'}
+                    className="text-sm font-medium text-gray-500 group-hover:text-gray-900"
+                    value={calculatePrice(item)?.usd} />
+                </p>
+                <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
+                  <NumberFormat
+                    displayType={'text'}
+                    thousandSeparator={true}
+                    prefix={'UZS '}
+                    className="text-sm font-medium text-gray-500 group-hover:text-gray-900"
+                    value={calculatePrice(item).uzs} />
+                </p>
+                <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
+                  {dayjs(item?.createdAt).format('MMMM D, YYYY')}
+                </p>
+              </div>
+            </Link>
+          )) : <p className="w-full text-sm font-medium text-gray-300 text-center align-center p-10">There is nothing !</p>}
 
       </div>
 

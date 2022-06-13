@@ -9,11 +9,15 @@ import BathtubContainer from '../containers/bathtubContainer/BathtubContainer'
 import SizesContainer from "../containers/sizesContainer/SizesContainer";
 import BathtubMaking from "../containers/bathtubContainer/baththib-making/BathtubMaking";
 import BathtubItemContainer from "../containers/bathtubContainer/BathtubItemContainer";
+import StepperContainer from "../containers/stepper/StepperContainer";
+import AboutContainer from "../containers/about/AboutContainer";
 
 export default function RouterContiner() {
   return (
     <Routes>
       <Route path="/" element={<BathtubContainer />} />
+      <Route path="/stepper" element={<StepperContainer />} />
+      <Route path="/about" element={<AboutContainer />} />
       <Route path="/create/bathtub" element={<BathtubListContainer />} />
       <Route path="/bathtub-making" element={<BathtubMaking />} />
       <Route path="/raw-materials" element={<RawMaterialsContainer />} />
