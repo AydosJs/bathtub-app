@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { IReqAmount } from '../bathTubMaking/bathTubMaking'
 import { IUnitsMeasurement } from '../unitsMeasurement/unitsMeasurement'
 
 export interface IMaterial {
@@ -6,7 +7,7 @@ export interface IMaterial {
   title: string,
   amount: number,
   measurement: IUnitsMeasurement | null,
-  prices: string,
+  prices: IReqAmount | null,
   currency: ICurrency | null,
   createdAt?: string
 }
@@ -16,9 +17,7 @@ export interface ICurrency {
   label: string,
   sybmol: string,
 
-  rate?: {
-    sum: string
-  }
+  rate?: IReqAmount | null
 }
 
 export interface IMaterialsState {
@@ -31,17 +30,31 @@ const initialState: IMaterialsState = {
     {
       id: "1654534473244",
       amount: 200,
-      currency: {value: 'usd', label: '"$" USD', sybmol: '$',rate: {sum: "10,100"} },
+      currency: {value: 'usd', label: 'USD', sybmol: '$',
+      rate: {
+        floatValue: 10.100,
+        formattedValue: '10,100',
+        value: '10,100'
+      }
+    },
       measurement: {id: '1654534003222', name: 'Meter', symbol: 'm'},
-      prices: "5.35",
+      prices: {
+        floatValue: 5.3,
+        formattedValue: '$ 5.3',
+        value: '5.3'
+      }, 
       title: "DSP"
     },
     {
       id: "1654534473255",
       amount: 500,
-      currency: {value: 'sum', label: '"SUM" UZS', sybmol: "SO'M"},
+      currency: {value: 'uzs', label: 'UZS', sybmol: "SUM"},
       measurement: {id: '1654534003504', name: 'Litr', symbol: 'lt'},
-      prices: "25,000",
+      prices: {
+        floatValue: 25000,
+        formattedValue: 'UZS 25,000',
+        value: '25000'
+      },
       title: "Water"
     }
   ],

@@ -72,7 +72,7 @@ function RawMaterialsContainer() {
                 {item.measurement?.name}
               </p>
               <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
-                {item.prices} {item.currency?.sybmol}
+                {item.prices?.formattedValue}
               </p>
             </div>
           )) : <p className="w-full text-sm font-medium text-gray-300 text-center align-center p-10">There is nothing !</p>}

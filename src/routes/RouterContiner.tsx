@@ -8,6 +8,7 @@ import UnitMeasurement from "../containers/unitMeasurement/UnitMeasurement";
 import BathtubContainer from '../containers/bathtubContainer/BathtubContainer'
 import SizesContainer from "../containers/sizesContainer/SizesContainer";
 import BathtubMaking from "../containers/bathtubContainer/baththib-making/BathtubMaking";
+import BathtubItemContainer from "../containers/bathtubContainer/BathtubItemContainer";
 
 export default function RouterContiner() {
   return (
@@ -18,6 +19,7 @@ export default function RouterContiner() {
       <Route path="/raw-materials" element={<RawMaterialsContainer />} />
       <Route path="/unit-measurement" element={<UnitMeasurement />} />
       <Route path="/sizes" element={<SizesContainer />} />
+      <Route path="/bathtub/:id" element={<BathtubItemContainer />} />
     </Routes>
   )
 }

@@ -1,41 +1,71 @@
 import MainContainer from "../../../layout/MainContainer"
 import { slectionColourStyles } from "../../rawMaterials/rawMaterials-save/CreateRawMaterials"
 import * as Yup from 'yup';
-import { useEffect, useState } from "react";
 import { FieldArray, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/Store";
 import Select from 'react-select';
-import { IBathtubType } from "../../../store/bathtubType/bathtubTypeSlice";
-import { IBathtub, IReqMaterials } from "../../../store/bathTubMaking/bathTubMaking";
-import { IMaterial } from "../../../store/rawMaterials/rawMaterialsSlice";
+import { createBathtubMaking, IBathtub, IReqMaterials } from "../../../store/bathTubMaking/bathTubMaking";
 import NumberFormat from "react-number-format";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 
 function BathtubMaking() {
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
   const store = useSelector((state: RootState) => state);
   const { bathtubTypes, bathtubSizes } = store.bathtubType
   const { materials } = store.rawMaterials
 
-  const [demoMtersial, setDeomoMaterials] = useState<IReqMaterials | any>(materials.reduce((acc: Array<IReqMaterials>, item: IMaterial) => acc.push({ requiredAmount: 0, material: {} }), []))
+  const [demoMtersial, setDeomoMaterials] = useState<IReqMaterials | any>([])
+  const materialsMaker = materials.reduce((acc: any, sep) => {
+    acc.push({
+      id: String(Date.now()),
+      requiredAmount: null,
+      material: { ...sep }
+    })
+
+    return acc
+  }, [])
+
+  useEffect(() => {
+    setDeomoMaterials(materialsMaker)
+  }, [])
 
   const onSubmit = (values: IBathtub) => {
-    console.log("FINAL VALUE", values)
+    // console.log("FINAL VALUE", values)
+    const payload = {
+      id: String(Date.now()),
+      createdAt: String(new Date()),
+      ...values
+    }
+    dispatch(createBathtubMaking(payload))
+    formik.resetForm()
+    toast.success('Successfully Added')
   };
 
   const formik = useFormik<IBathtub>({
     initialValues: {
       type: {
-        title: ""
+        requiredAmount: {
+          floatValue: 0,
+          formattedValue: '',
+          value: '1'
+        },
+        typeInfo: null
       },
       sizes: [],
       materials: []
     },
     enableReinitialize: true,
     validationSchema: Yup.object({
-      type: Yup.object({
-        title: Yup.string().required('Requred'),
+      type: Yup.object().shape({
+        requiredAmount: Yup.object().shape({
+          value: Yup.string().required('Required')
+        }).required('Required'),
+        typeInfo: Yup.object({
+          title: Yup.string().required('Requred'),
+        })
       }),
       sizes: Yup.array().of(
         Yup.object().shape({
@@ -44,47 +74,78 @@ function BathtubMaking() {
       )
         .required('Requred')
         .min(1, 'Add at lest one size'),
+      materials: Yup.array()
+        .required('Requred')
+        .min(1, 'Add at lest one material'),
     }),
     onSubmit
   });
 
-  console.log("formik", formik.values)
+
   return (
     <MainContainer>
       <div className="flex flex-row justify-center">
+
         <form onSubmit={formik.handleSubmit} className="basis-1/2 flex flex-col space-y-2 bg-white p-4">
-
           {/* Type */}
-          <div className="basis-1/2">
-            <label htmlFor="select-input" className="block py-3 text-sm font-medium ">Unit measurement</label>
+          <div className="flex flex-row flex-nowrap  space-x-2">
+            <div className="basis-1/2">
+              <label htmlFor="select-input" className="block py-3 text-sm font-medium ">Unit measurement</label>
 
-            <Select
-              id="type"
-              name='type'
-              className="text-sm rounded block w-full"
-              classNamePrefix="select"
-              onBlur={formik.handleBlur}
-              styles={slectionColourStyles}
-              options={bathtubTypes}
-              getOptionLabel={(option: any) => option?.title}
-              getOptionValue={(option: any) => option?.id}
-              placeholder="Select type"
-              onChange={(value) => {
-                console.log("value", value)
-                formik.handleChange({
-                  target: {
-                    type: 'change',
-                    name: "type",
-                    value,
-                  }
-                })
-              }}
-            />
-            {formik.errors.type?.title && formik.touched.type?.title &&
-              <p className='text-sm text-red-500 mt-2 font-medium'>
-                {formik.errors.type.title}
-              </p>
-            }
+              <Select
+                id="type"
+                name='type'
+                className="text-sm rounded block w-full"
+                classNamePrefix="select"
+                onBlur={formik.handleBlur}
+                styles={slectionColourStyles}
+                options={bathtubTypes}
+                getOptionLabel={(option: any) => option?.title}
+                getOptionValue={(option: any) => option?.id}
+                placeholder="Select type"
+                onChange={(value) => {
+                  console.log("value", value)
+                  formik.handleChange({
+                    target: {
+                      type: 'change',
+                      name: "type",
+                      value: {
+                        requiredAmount: String(1),
+                        typeInfo: { ...value }
+                      },
+                    }
+                  })
+                }}
+              />
+            </div>
+            <div className="basis-1/2">
+              <label htmlFor="select-input" className="block py-3 text-sm font-medium ">Amount</label>
+
+              <NumberFormat
+                min={1} max={100000}
+                id="type.requiredAmount"
+                name={`type.requiredAmount`}
+                thousandSeparator={true}
+                placeholder="0"
+                className="border text-sm rounded block w-full p-2.5"
+                value={formik.values.type?.requiredAmount?.value}
+                onValueChange={(values) => {
+                  formik.handleChange({
+                    target: {
+                      type: 'change',
+                      name: "type.requiredAmount",
+                      value: values,
+                    }
+                  })
+                }}
+              />
+
+              {/* {formik.errors.type?.requiredAmount?.value && formik.touched.type?.requiredAmount?.value &&
+                <p className='text-sm text-red-500 mt-2 font-medium'>
+                  {formik.errors.type?.requiredAmount?.value}
+                </p>
+              } */}
+            </div>
           </div>
 
           <div>
@@ -93,7 +154,6 @@ function BathtubMaking() {
               closeMenuOnSelect={false}
               isMulti
               placeholder="Select sizes"
-              // defaultValue={[bathtubSizes[4], bathtubSizes[5]]}
               getOptionLabel={(option: any) => option?.size}
               getOptionValue={(option: any) => option?.id}
               options={bathtubSizes}
@@ -117,6 +177,7 @@ function BathtubMaking() {
           </div>
 
           <div>
+
             <div className="flex flex-row space-x-2 flex-nowrap">
               <label htmlFor="size" className="basis-1/2 block py-3 text-sm font-medium ">
                 Raw materials
@@ -127,10 +188,6 @@ function BathtubMaking() {
               <div className="w-10 p-2 bg-red-500 opacity-0" />
             </div>
 
-          </div>
-
-
-          <div className="">
             <FormikProvider value={formik}>
               <FieldArray
                 name="materials"
@@ -143,22 +200,26 @@ function BathtubMaking() {
                           <div className="basis-1/2">
                             <input
                               readOnly
-                              name={`formik.values.materials[${index}].title`}
+                              name={`formik.values.materials[${index}].material.title`}
                               type="text"
-                              value={`${item.material?.title}`}
-                              // (${formik.values.materials[index]?.measurement?.name})
+                              value={`${item?.material?.title} (${item?.material.measurement?.symbol})`}
                               placeholder="Corner bath"
                               className="border text-sm rounded block w-full p-2.5" />
                           </div>
                           <div className="basis-1/2">
                             <NumberFormat
                               min={0} max={100000}
-                              id="amount"
-                              name='amount'
+                              id="requiredAmount"
+                              name={`requiredAmount`}
                               thousandSeparator={true}
-                              suffix={` ${item.material.measurement?.symbol}`}
+                              suffix={` ${item?.material.measurement?.symbol}`}
                               placeholder="0"
                               className="border text-sm rounded block w-full p-2.5"
+                              value={item?.requiredAmount?.value}
+                              onValueChange={(values: any) => {
+                                item.requiredAmount = values
+                              }}
+
                             />
                           </div>
                           <div
@@ -168,7 +229,7 @@ function BathtubMaking() {
                             )}
                             className="w-10 p-2 bg-red-500 opacity-50 hover:opacity-100 hover:cursor-pointer flex items-center justify-center rounded">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 20 20" fill="currentColor">
-                              <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                              <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
                             </svg>
                           </div>
                         </div>
@@ -178,23 +239,24 @@ function BathtubMaking() {
                     {demoMtersial.length !== 0 && (
                       <div className="mt-6">
                         <Select
-                          closeMenuOnSelect={true}
+                          closeMenuOnSelect={false}
                           placeholder="Select materials"
                           styles={slectionColourStyles}
                           options={demoMtersial}
-                          getOptionLabel={(option: any) => option?.title}
-                          getOptionValue={(option: any) => option?.id}
+                          defaultValue={null}
+                          getOptionLabel={(option: any) => option?.material?.title}
+                          getOptionValue={(option: any) => option?.material?.id}
                           onChange={(value) => {
                             arrayHelpers.push(
                               {
                                 id: String(Date.now()),
-                                requiredAmount: 0,
+                                requiredAmount: null,
                                 material: {
-                                  ...value
+                                  ...value.material
                                 }
                               }
                             )
-                            setDeomoMaterials(demoMtersial.filter((item: IReqMaterials) => item?.material.id !== value?.id))
+                            setDeomoMaterials(demoMtersial.filter((item: IReqMaterials) => item?.material.id !== value?.material?.id))
                           }}
                         />
                       </div>
@@ -204,36 +266,47 @@ function BathtubMaking() {
                 )}
               />
             </FormikProvider>
+
+            {/* <div className="mt-2 flex flex-row space-x-2">
+              <div className="basis-1/2">
+                <label className="block py-3 text-sm font-medium ">Total price</label>
+                <p className="p-2.5 border rounded text-sm font-medium">
+                  $34.000
+                </p>
+              </div>
+
+              <div className="basis-1/2">
+                <label htmlFor="select-input" className="block py-3 text-sm font-medium ">Currency</label>
+
+                <Select
+                  id="type"
+                  name='type'
+                  className="text-sm rounded block w-full"
+                  classNamePrefix="select"
+                  onBlur={formik.handleBlur}
+                  styles={slectionColourStyles}
+                  options={bathtubTypes}
+                  getOptionLabel={(option: any) => option?.title}
+                  getOptionValue={(option: any) => option?.id}
+                  placeholder="Select type"
+                  onChange={(value) => {
+                    console.log("value", value)
+                    formik.handleChange({
+                      target: {
+                        type: 'change',
+                        name: "type",
+                        value: {
+                          requiredAmount: String(1),
+                          typeInfo: { ...value }
+                        },
+                      }
+                    })
+                  }}
+                />
+              </div>
+            </div> */}
+
           </div>
-
-
-          <div>
-            {/* <label htmlFor="size" className="block py-3 text-sm font-medium ">
-              Add materials
-            </label>
-            <Select
-              id="materials"
-              name='materials'
-              closeMenuOnSelect={true}
-              placeholder="Select materials"
-              styles={slectionColourStyles}
-              options={materials}
-              onBlur={formik.handleBlur}
-              getOptionLabel={(option: any) => option?.title}
-              getOptionValue={(option: any) => option?.id}
-              onChange={(value) => {
-                console.log("value", value)
-                formik.handleChange({
-                  target: {
-                    type: 'change',
-                    name: "materials",
-                    value,
-                  }
-                })
-              }}
-            /> */}
-          </div>
-
 
           {/* SAVE */}
           <div className=''>

@@ -2,15 +2,26 @@ import { createSlice } from '@reduxjs/toolkit'
 import { IBathtubSizes, IBathtubType } from '../bathtubType/bathtubTypeSlice'
 import { IMaterial } from '../rawMaterials/rawMaterialsSlice'
 
+export interface IReqAmount {
+  floatValue: number,
+  formattedValue: string,
+  value: string
+}
 export interface IReqMaterials {
-  requiredAmount : number,
-  material: IMaterial
+  requiredAmount : IReqAmount,
+  material: IMaterial,
+  id?: string
 }
 
 export  interface IBathtub {
-  type: IBathtubType,
+  type: {
+    requiredAmount: IReqAmount,
+    typeInfo: IBathtubType | null
+  },
   sizes: IBathtubSizes[] | null,
-  materials: IReqMaterials[]
+  materials: IReqMaterials[],
+  id?: string,
+  createdAt?: string
 }
 
 export interface IBathtubMatking {
@@ -28,7 +39,7 @@ export const bathTubMakingSlice = createSlice({
   initialState,
   reducers: {
     createBathtubMaking: (state: IBathtubMatking, action: any) => {
-      console.log("bathtub action.payload",action.payload)
+      console.log("bathtubmaking action.payload",action.payload)
       state.bathtubs.push(action.payload)
     }
   },

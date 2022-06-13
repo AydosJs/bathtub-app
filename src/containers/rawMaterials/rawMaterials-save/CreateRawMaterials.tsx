@@ -9,7 +9,7 @@ import { RootState } from '../../../store/Store';
 import { IUnitsMeasurement } from '../../../store/unitsMeasurement/unitsMeasurement';
 
 export const slectionColourStyles: any = {
-  control: (styles: any) => ({ ...styles, height: '42px', borderColor: "#e5e7eb", overFlow: 'hidden' }),
+  control: (styles: any) => ({ ...styles, minHeight: '42px', borderColor: "#e5e7eb", overFlow: 'hidden' }),
   menu: (styles: any) => ({ ...styles, fontSize: '0.875rem', }),
   placeholder: (styles: any) => ({ ...styles, fontSize: '0.875rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }),
 };
@@ -22,15 +22,22 @@ export default function CreateRawMaterials() {
     return acc
   }, []);
   const optionsCurrency: Array<any> = [
-    { value: 'usd', label: '"$" USD', sybmol: "$" },
-    { value: 'sum', label: '"SUM" UZS', sybmol: "SO'M" }
+    {
+      value: 'usd', label: 'USD', sybmol: '$',
+      rate: {
+        floatValue: 10.100,
+        formattedValue: '10,100',
+        value: '10,100'
+      }
+    },
+    { value: 'uzs', label: 'UZS', sybmol: "SUM" },
   ]
 
   const [initialValues, setInitialValues] = useState<IMaterial>({
     title: '',
     amount: 0,
     measurement: unitsMeasurement[0],
-    prices: "",
+    prices: null,
     currency: optionsCurrency[0]
   })
 
@@ -42,7 +49,7 @@ export default function CreateRawMaterials() {
       name: Yup.string().required('Required'),
     }).required('You have to select one measurement'),
 
-    prices: Yup.string().required('Required'),
+    prices: Yup.object().required('Required'),
 
     currency: Yup.object({
       value: Yup.string().required(),
@@ -160,11 +167,19 @@ export default function CreateRawMaterials() {
           <NumberFormat
             id="prices"
             name='prices'
-            onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.prices}
+            value={formik.values.prices?.value}
+            onValueChange={(values) => {
+              formik.handleChange({
+                target: {
+                  type: 'change',
+                  name: "prices",
+                  value: values,
+                }
+              })
+            }}
             thousandSeparator={true}
-            // prefix={'$'}
+            prefix={`${formik?.values?.currency?.sybmol} `}
             placeholder={formik.values.currency?.value === 'usd' ? "$2.30" : "UZS 1,200"}
             className="border focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm rounded block w-full p-2.5" />
           {formik.errors.prices && formik.touched.prices ? (
@@ -213,11 +228,19 @@ export default function CreateRawMaterials() {
           <NumberFormat
             id="currency.rate.sum"
             name='currency.rate.sum'
-            onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.currency.rate?.sum}
+            value={formik.values.currency.rate?.value}
+            onValueChange={(values) => {
+              formik.handleChange({
+                target: {
+                  type: 'change',
+                  name: "currency.rate",
+                  value: values,
+                }
+              })
+            }}
             thousandSeparator={true}
-            // prefix={'SUM '}
+            prefix={'SUM '}
             placeholder="SUM 10,100"
             className="border focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm rounded block w-full p-2.5" />
         </div>
