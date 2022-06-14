@@ -23,17 +23,17 @@ const initialState: IUnitsMeasurmentState = {
     {
       createdAt: "Mon Jun 13 2022 18:21:29 GMT+0500 (Uzbekistan Standard Time)",
       id: "1655126489392",
-      title: "First"
+      title: "Угловая ванна"
     },
     {
       createdAt: "Mon Jun 13 2022 18:22:15 GMT+0500 (Uzbekistan Standard Time)",
       id: "1655126535993",
-      title: "Second"
+      title: "Стандарт ванны"
     },
     {
       createdAt: "Mon Jun 13 2022 18:22:24 GMT+0500 (Uzbekistan Standard Time)",
       id: "1655126544248",
-      title: "Third"
+      title: "Парус ванны"
     }
   ],
   bathtubSizes :[

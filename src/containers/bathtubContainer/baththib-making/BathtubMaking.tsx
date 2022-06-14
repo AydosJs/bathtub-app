@@ -36,9 +36,9 @@ function BathtubMaking() {
   const initialValues = {
     type: {
       requiredAmount: {
-        floatValue: 1,
-        formattedValue: '1',
-        value: '1'
+        floatValue: 0,
+        formattedValue: '0',
+        value: '0'
       },
       typeInfo: null
     },
@@ -47,7 +47,7 @@ function BathtubMaking() {
   }
 
   const onSubmit = (values: IBathtub) => {
-    // console.log("FINAL VALUE", values)
+    console.log("FINAL VALUE", values)
     const payload = {
       id: String(Date.now()),
       createdAt: String(new Date()),
@@ -76,12 +76,19 @@ function BathtubMaking() {
       )
         .required('Requred')
         .min(1, 'Add at lest one size'),
-      materials: Yup.array()
+      materials: Yup.array().of(
+        Yup.object().shape({
+          requiredAmount: Yup.object().required("Name required"),
+        })
+      )
         .required('Requred')
         .min(1, 'Add at lest one material'),
     }),
     onSubmit
   });
+
+
+  // console.log("FORMIK errors", formik.errors);
 
 
   return (
@@ -209,7 +216,7 @@ function BathtubMaking() {
 
                     <div className="flex flex-col space-y-2">
                       {formik.values.materials.length > 0 && formik.values.materials.map((item: IReqMaterials, index: number) => (
-                        <div>
+                        <div key={item?.id}>
                           <div className="flex flex-row space-x-2 flex-nowrap" >
                             <div className="basis-1/2">
                               <input
@@ -223,17 +230,16 @@ function BathtubMaking() {
                             <div className="basis-1/2">
                               <NumberFormat
                                 min={0} max={100000}
-                                id="requiredAmount"
-                                name={`requiredAmount`}
+                                id={`formik.values.materials[${index}].requiredAmount`}
+                                name={`formik.values.materials[${index}].requiredAmount`}
                                 thousandSeparator={true}
                                 suffix={` ${item?.material.measurement?.symbol}`}
                                 placeholder="0"
                                 className="border text-sm rounded block w-full p-2.5"
-                                value={item?.requiredAmount?.value}
+                                value={item?.requiredAmount?.floatValue}
                                 onValueChange={(values: any) => {
                                   item.requiredAmount = values
                                 }}
-
                               />
                             </div>
                             <div
@@ -247,9 +253,9 @@ function BathtubMaking() {
                               </svg>
                             </div>
                           </div>
-                          {/* {formik.errors.materials![index].requiredAmount && formik.touched.materials![index].requiredAmount &&
+                          {/* {formik.errors?.materials[0]?.requiredAmount && formik.touched.materials![index].requiredAmount &&
                             <p className='text-sm text-red-500 mt-2 font-medium'>
-                              {formik.errors.materials[index]}
+                              {formik.errors?.materials[index]}
                             </p>
                           } */}
                         </div>
@@ -270,7 +276,11 @@ function BathtubMaking() {
                             arrayHelpers.push(
                               {
                                 id: String(Date.now()),
-                                requiredAmount: null,
+                                requiredAmount: {
+                                  floatValue: 0,
+                                  formattedValue: '0',
+                                  value: '0'
+                                },
                                 material: {
                                   ...value.material
                                 }
