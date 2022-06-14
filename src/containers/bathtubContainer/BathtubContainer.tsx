@@ -32,8 +32,8 @@ function BathtubContainer() {
       }
     })
 
-    totalPrice['usd'] = bathtubItem?.type?.requiredAmount?.floatValue * materialsTotalPriceUSD
-    totalPrice['uzs'] = bathtubItem?.type?.requiredAmount?.floatValue * materialsTotalPriceUZS
+    totalPrice['usd'] = bathtubItem?.type?.requiredAmount?.floatValue! * materialsTotalPriceUSD
+    totalPrice['uzs'] = bathtubItem?.type?.requiredAmount?.floatValue! * materialsTotalPriceUZS
 
     return totalPrice
   }
@@ -89,9 +89,6 @@ function BathtubContainer() {
             Sizes
           </p>
           <p className="w-1/2 text-sm font-medium ">
-            Materials Price
-          </p>
-          <p className="w-1/2 text-sm font-medium ">
             Total Price
           </p>
           <p className="w-1/2 text-sm font-medium ">
@@ -129,15 +126,16 @@ function BathtubContainer() {
                     {item?.sizes?.map((item: IBathtubSizes, index: number) => index <= 2 ? <p key={index} className="p-0.5 group-hover:bg-white text-xs border rounded">{item?.size}</p> : null)}
                   </div>
                 </p>
+
                 <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
                   <NumberFormat
                     displayType={'text'}
                     thousandSeparator={true}
-                    prefix={'$'}
+
+                    prefix={'$ '}
                     className="text-sm font-medium text-gray-500 group-hover:text-gray-900"
-                    value={calculatePrice(item)?.usd} />
-                </p>
-                <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
+                    value={calculatePrice(item).usd} />
+                  &nbsp;|&nbsp;
                   <NumberFormat
                     displayType={'text'}
                     thousandSeparator={true}

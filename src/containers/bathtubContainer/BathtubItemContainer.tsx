@@ -14,10 +14,10 @@ export default function BathtubItemContainer() {
   const bathtubItem: IBathtub = bathtubs.find((item: IBathtub) => item?.id === id)!
 
   const total: any = {
-    usd: {
-      totalMaterialsPrice: 0,
-      totalPrice: 0,
-    },
+    // usd: {
+    //   totalMaterialsPrice: 0,
+    //   totalPrice: 0,
+    // },
     uzs: {
       totalMaterialsPrice: 0,
       totalPrice: 0,
@@ -26,16 +26,19 @@ export default function BathtubItemContainer() {
 
   const totalCaclMaterials = () => {
     bathtubItem?.materials?.map((item: IReqMaterials) => {
-      console.log("itemmmm", item)
       if (item?.material?.currency?.value === 'usd') {
-        total.usd.totalMaterialsPrice += item?.requiredAmount?.floatValue * item?.material?.prices?.floatValue!
+
+        const rate = item?.material?.currency?.rate?.floatValue
+        const rateSum = rate! * item?.material?.prices?.floatValue!
+
+        total.uzs.totalMaterialsPrice += item?.requiredAmount?.floatValue * rateSum!
       } else if (item?.material?.currency?.value === 'uzs') {
         total.uzs.totalMaterialsPrice += item?.requiredAmount?.floatValue * item?.material?.prices?.floatValue!
       }
     })
 
-    total.usd.totalPrice = bathtubItem?.type?.requiredAmount?.floatValue * total.usd.totalMaterialsPrice
-    total.uzs.totalPrice = bathtubItem?.type?.requiredAmount?.floatValue * total.uzs.totalMaterialsPrice
+    // total.usd.totalPrice = bathtubItem?.type?.requiredAmount?.floatValue * total.usd.totalMaterialsPrice
+    total.uzs.totalPrice = bathtubItem?.type?.requiredAmount?.floatValue! * total.uzs.totalMaterialsPrice
   }
 
   totalCaclMaterials()
@@ -95,9 +98,13 @@ export default function BathtubItemContainer() {
                       <NumberFormat
                         displayType={'text'}
                         thousandSeparator={true}
-                        prefix={`${item?.material?.currency?.sybmol} `}
+                        prefix={`SUM `}
                         className="text-sm font-medium group-hover:text-gray-900"
-                        value={Number(item?.requiredAmount?.floatValue) * parseFloat(String(item?.material?.prices?.floatValue))}
+                        value={item?.material?.currency?.value === 'uzs' ?
+                          item?.requiredAmount?.floatValue! * item?.material?.prices?.floatValue!
+                          :
+                          (item?.material?.prices?.floatValue! * item?.material?.currency?.rate?.floatValue!) * item?.requiredAmount?.floatValue
+                        }
                       />
                     </div>
                   </div>
@@ -106,36 +113,20 @@ export default function BathtubItemContainer() {
 
             </div>
             <div className="flex flex-col space-y-2 p-2">
-              {total.usd.totalMaterialsPrice !== 0 && (
-                <div className="basis-1/3 text-sm font-medium text-gray-500">
-                  Total price of materials (USD)
-                  &nbsp;
-                  <span className="text-md text-gray-900 font-medium">
-                    <NumberFormat
-                      displayType={'text'}
-                      thousandSeparator={true}
-                      prefix={'$ '}
-                      className="text-sm font-medium group-hover:text-gray-900"
-                      value={total?.usd?.totalMaterialsPrice}
-                    />
-                  </span>
-                </div>
-              )}
-              {total.uzs.totalMaterialsPrice !== 0 && (
-                <div className="basis-1/3 text-sm font-medium text-gray-500">
-                  Total price of materials (UZS)
-                  &nbsp;
-                  <span className="text-md text-gray-900 font-medium">
-                    <NumberFormat
-                      displayType={'text'}
-                      thousandSeparator={true}
-                      prefix={'SUM '}
-                      className="text-sm font-medium group-hover:text-gray-900"
-                      value={total?.uzs?.totalMaterialsPrice}
-                    />
-                  </span>
-                </div>
-              )}
+
+              <div className="basis-1/3 text-sm font-medium text-gray-500">
+                Total price of materials
+                &nbsp;
+                <span className="text-md text-gray-900 font-medium">
+                  <NumberFormat
+                    displayType={'text'}
+                    thousandSeparator={true}
+                    prefix={'SUM '}
+                    className="text-sm font-medium group-hover:text-gray-900"
+                    value={total?.uzs?.totalMaterialsPrice}
+                  />
+                </span>
+              </div>
             </div>
           </div>
 
@@ -148,32 +139,12 @@ export default function BathtubItemContainer() {
               Total price
             </span>
             <span className="text-md font-medium">
-              {total.usd.totalPrice !== 0 && (
-                <>
-                  <NumberFormat
-                    displayType={'text'}
-                    thousandSeparator={true}
-                    prefix={`$ `}
-                    value={total.usd.totalPrice}
-                  />
-                  &nbsp;
-                </>
-              )}
-
-              {(total.usd.totalPrice !== 0 && total.uzs.totalPrice !== 0) && <span className="text-sm text-gray-600">and</span>}
-
-              {total.uzs.totalPrice !== 0 && (
-                <>
-                  &nbsp;
-                  <NumberFormat
-                    displayType={'text'}
-                    thousandSeparator={true}
-                    prefix={`UZS `}
-                    value={total.uzs.totalPrice}
-                  />
-                </>
-              )}
-
+              <NumberFormat
+                displayType={'text'}
+                thousandSeparator={true}
+                prefix={`UZS `}
+                value={total.uzs.totalPrice}
+              />
             </span>
           </div>
 

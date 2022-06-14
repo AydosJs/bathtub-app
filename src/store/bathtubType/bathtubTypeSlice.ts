@@ -21,21 +21,36 @@ export interface IUnitsMeasurmentState {
 const initialState: IUnitsMeasurmentState = {
   bathtubTypes: [
     {
-      createdAt: "Mon Jun 06 2022 21:43:08 GMT+0500 (Uzbekistan Standard Time)",
-      id: "1654533788244",
-      title: "Corner"
+      createdAt: "Mon Jun 13 2022 18:21:29 GMT+0500 (Uzbekistan Standard Time)",
+      id: "1655126489392",
+      title: "First"
+    },
+    {
+      createdAt: "Mon Jun 13 2022 18:22:15 GMT+0500 (Uzbekistan Standard Time)",
+      id: "1655126535993",
+      title: "Second"
+    },
+    {
+      createdAt: "Mon Jun 13 2022 18:22:24 GMT+0500 (Uzbekistan Standard Time)",
+      id: "1655126544248",
+      title: "Third"
     }
   ],
   bathtubSizes :[
     {
-      size: "120x120",
-      createdAt: "Mon Jun 06 2022 21:40:38 GMT+0500 (Uzbekistan Standard Time)",
-      id: "1654533638839"
+      createdAt: "Mon Jun 13 2022 18:23:16 GMT+0500 (Uzbekistan Standard Time)",
+      id: "1655126596129",
+      size: "110x110"
     },
     {
-      size: "130x130",
+      createdAt: "Mon Jun 06 2022 21:40:38 GMT+0500 (Uzbekistan Standard Time)",
+      id: "1654533638839",
+      size: "120x120"
+    },
+    {
       createdAt: "Mon Jun 06 2022 21:42:30 GMT+0500 (Uzbekistan Standard Time)",
-      id: "1654533750134"
+      id: "1654533750134",
+      size: "130x130"
     }
   ],
   isLoading: false

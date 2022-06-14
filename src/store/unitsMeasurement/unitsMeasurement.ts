@@ -15,22 +15,28 @@ export interface IUnitsMeasurmentState {
 const initialState: IUnitsMeasurmentState = {
   unitsMeasurement: [
     {
-      createdAt: "Mon Jun 06 2022 21:49:27 GMT+0500 (Uzbekistan Standard Time)",
-      id: "1654534167887",
-      name: "Kilogram",
-      symbol: "kg"
+      createdAt: "Mon Jun 13 2022 18:26:49 GMT+0500 (Uzbekistan Standard Time)",
+      id: "1655126809300",
+      name: "Litre",
+      symbol: "L"
     },
     {
-      createdAt: "Mon Jun 06 2022 21:48:55 GMT+0500 (Uzbekistan Standard Time)",
-      id: "1654534135730",
+      createdAt: "Mon Jun 13 2022 18:27:26 GMT+0500 (Uzbekistan Standard Time)",
+      id: "1655126846627",
       name: "Meter",
-      symbol: "mt"
+      symbol: "M"
     },
     {
-      createdAt: "Mon Jun 06 2022 21:49:55 GMT+0500 (Uzbekistan Standard Time)",
-      id: "1654534195686",
-      name: "Litr",
-      symbol: "lt"
+      createdAt: "Mon Jun 13 2022 18:27:52 GMT+0500 (Uzbekistan Standard Time)",
+      id: "1655126872001",
+      name: "Kilogram ",
+      symbol: "Kg"
+    },
+    {
+      createdAt: "Mon Jun 13 2022 18:29:33 GMT+0500 (Uzbekistan Standard Time)",
+      id: "1655126973125",
+      name: "Gram",
+      symbol: "g"
     }
   ],
   isLoading: false

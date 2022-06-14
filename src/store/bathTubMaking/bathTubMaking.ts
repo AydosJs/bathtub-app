@@ -15,7 +15,7 @@ export interface IReqMaterials {
 
 export  interface IBathtub {
   type: {
-    requiredAmount: IReqAmount,
+    requiredAmount: IReqAmount  | null,
     typeInfo: IBathtubType | null
   },
   sizes: IBathtubSizes[] | null,
@@ -30,7 +30,33 @@ export interface IBathtubMatking {
 }
 
 const initialState: IBathtubMatking = {
-  bathtubs :[],
+  bathtubs :[
+    // {
+    //   id: "1655127262289",
+    //   material: {
+    //     amount: 17,
+    //     createdAt: 'Mon Jun 13 2022 18:33:14 GMT+0500 (Uzbekistan Standard Time)',
+    //     id: '1655127194351',
+    //     currency: {
+    //       label: "USD",
+    //         rate:{
+    //           floatValue: 10977,
+    //           formattedValue: "SUM 10,977",
+    //           value: "10977"
+    //         },
+    //       sybmol: "$",
+    //       value: "usd"
+    //     },
+    //     measurement: {
+    //       id: "1655126872001",
+    //       name: "Kilogram ",
+    //       symbol: "Kg"
+    //     }
+    //   },
+    //   requiredAmount: {formattedValue: '100 Kg', value: '100', floatValue: 100}
+    // }
+  ]
+  ,
   isLoading: false
 }
 

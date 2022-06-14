@@ -9,10 +9,10 @@ function AboutContainer() {
           <h1 className="text-xl font-medium text-gray-900">About to create Bathtub</h1>
 
           <ul className="mt-8 list-disc pl-6 flex flex-col space-y-3" >
-            <li className="text-md font-medium text-gray-600 ">Create needs "Unit measurments"</li>
-            <li className="text-md font-medium text-gray-600 ">Create "Raw Materials"</li>
-            <li className="text-md font-medium text-gray-600 ">Create needs "Sizes" one or more</li>
-            <li className="text-md font-medium text-gray-600 ">Create "Bath types" one or more</li>
+            <li className="text-sm font-medium text-gray-600 ">Create needs "Unit measurments"</li>
+            <li className="text-sm font-medium text-gray-600 ">Create "Raw Materials"</li>
+            <li className="text-sm font-medium text-gray-600 ">Create needs "Sizes" one or more</li>
+            <li className="text-sm font-medium text-gray-600 ">Create "Bath types" one or more</li>
           </ul>
 
           <div className="mt-8">

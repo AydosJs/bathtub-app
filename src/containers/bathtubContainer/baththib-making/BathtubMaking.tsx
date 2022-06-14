@@ -5,10 +5,11 @@ import { FieldArray, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/Store";
 import Select from 'react-select';
-import { createBathtubMaking, IBathtub, IReqMaterials } from "../../../store/bathTubMaking/bathTubMaking";
+import { createBathtubMaking, IBathtub, IReqAmount, IReqMaterials } from "../../../store/bathTubMaking/bathTubMaking";
 import NumberFormat from "react-number-format";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { IBathtubType } from "../../../store/bathtubType/bathtubTypeSlice";
 
 
 function BathtubMaking() {
@@ -32,6 +33,19 @@ function BathtubMaking() {
     setDeomoMaterials(materialsMaker)
   }, [])
 
+  const initialValues = {
+    type: {
+      requiredAmount: {
+        floatValue: 1,
+        formattedValue: '1',
+        value: '1'
+      },
+      typeInfo: null
+    },
+    sizes: [],
+    materials: []
+  }
+
   const onSubmit = (values: IBathtub) => {
     // console.log("FINAL VALUE", values)
     const payload = {
@@ -40,29 +54,17 @@ function BathtubMaking() {
       ...values
     }
     dispatch(createBathtubMaking(payload))
-    formik.resetForm()
+    formik.resetForm({ values: initialValues })
+    setDeomoMaterials(materialsMaker)
     toast.success('Successfully Added')
   };
 
   const formik = useFormik<IBathtub>({
-    initialValues: {
-      type: {
-        requiredAmount: {
-          floatValue: 0,
-          formattedValue: '',
-          value: '1'
-        },
-        typeInfo: null
-      },
-      sizes: [],
-      materials: []
-    },
+    initialValues,
     enableReinitialize: true,
     validationSchema: Yup.object({
       type: Yup.object().shape({
-        requiredAmount: Yup.object().shape({
-          value: Yup.string().required('Required')
-        }).required('Required'),
+        requiredAmount: Yup.object().required('Required'),
         typeInfo: Yup.object({
           title: Yup.string().required('Requred'),
         })
@@ -82,10 +84,11 @@ function BathtubMaking() {
   });
 
 
+  console.log("formik", formik.values)
+
   return (
     <MainContainer>
       <div className="flex flex-row justify-center">
-
         <form onSubmit={formik.handleSubmit} className="basis-1/2 flex flex-col space-y-2 bg-white p-4">
           {/* Type */}
           <div className="flex flex-row flex-nowrap  space-x-2">
@@ -93,30 +96,35 @@ function BathtubMaking() {
               <label htmlFor="select-input" className="block py-3 text-sm font-medium ">Unit measurement</label>
 
               <Select
-                id="type"
-                name='type'
+                id="type.typeInfo"
+                name='type.typeInfo'
                 className="text-sm rounded block w-full"
                 classNamePrefix="select"
                 onBlur={formik.handleBlur}
                 styles={slectionColourStyles}
                 options={bathtubTypes}
-                getOptionLabel={(option: any) => option?.title}
-                getOptionValue={(option: any) => option?.id}
+                getOptionLabel={(option: IBathtubType) => option?.title}
+                getOptionValue={(option: IBathtubType) => option?.id!}
                 placeholder="Select type"
-                onChange={(value) => {
-                  console.log("value", value)
+                value={formik.values.type.typeInfo}
+                onChange={(value: any) => {
+                  // console.log("value", value)
                   formik.handleChange({
                     target: {
                       type: 'change',
-                      name: "type",
-                      value: {
-                        requiredAmount: String(1),
-                        typeInfo: { ...value }
-                      },
+                      name: "type.typeInfo",
+                      id: "type.typeInfo",
+                      value
                     }
                   })
                 }}
               />
+
+              {formik.errors.type?.typeInfo && formik.touched.type?.typeInfo &&
+                <p className='text-sm text-red-500 mt-2 font-medium'>
+                  {formik.errors.type?.typeInfo}
+                </p>
+              }
             </div>
             <div className="basis-1/2">
               <label htmlFor="select-input" className="block py-3 text-sm font-medium ">Amount</label>
@@ -125,10 +133,11 @@ function BathtubMaking() {
                 min={1} max={100000}
                 id="type.requiredAmount"
                 name={`type.requiredAmount`}
+                onBlur={formik.handleBlur}
                 thousandSeparator={true}
                 placeholder="0"
                 className="border text-sm rounded block w-full p-2.5"
-                value={formik.values.type?.requiredAmount?.value}
+                value={formik.values.type?.requiredAmount?.floatValue}
                 onValueChange={(values) => {
                   formik.handleChange({
                     target: {
@@ -140,11 +149,11 @@ function BathtubMaking() {
                 }}
               />
 
-              {/* {formik.errors.type?.requiredAmount?.value && formik.touched.type?.requiredAmount?.value &&
+              {formik.errors.type?.requiredAmount && formik.touched.type?.requiredAmount &&
                 <p className='text-sm text-red-500 mt-2 font-medium'>
-                  {formik.errors.type?.requiredAmount?.value}
+                  {formik.errors.type?.requiredAmount}
                 </p>
-              } */}
+              }
             </div>
           </div>
 
@@ -153,13 +162,15 @@ function BathtubMaking() {
             <Select
               closeMenuOnSelect={false}
               isMulti
+              id="sizes"
+              name="sizes"
               placeholder="Select sizes"
               getOptionLabel={(option: any) => option?.size}
               getOptionValue={(option: any) => option?.id}
               options={bathtubSizes}
+              value={formik.values.sizes}
               styles={slectionColourStyles}
               onChange={(value) => {
-                console.log("value", value)
                 formik.handleChange({
                   target: {
                     type: 'change',
