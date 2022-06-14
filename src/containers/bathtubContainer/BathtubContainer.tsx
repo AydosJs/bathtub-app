@@ -17,22 +17,25 @@ function BathtubContainer() {
   // 
 
   const totalPrice = {
-    usd: 0,
+    // usd: 0,
     uzs: 0
   }
   const calculatePrice = (bathtubItem: IBathtub) => {
-    let materialsTotalPriceUSD = 0
+    // let materialsTotalPriceUSD = 0
     let materialsTotalPriceUZS = 0
 
     bathtubItem?.materials?.map((item: IReqMaterials) => {
       if (item?.material?.currency?.value === 'usd') {
-        materialsTotalPriceUSD += item?.requiredAmount?.floatValue * Number(item?.material?.prices?.floatValue)
+        const rate = item?.material?.currency?.rate?.floatValue
+        const rateSum = rate! * item?.material?.prices?.floatValue!
+
+        materialsTotalPriceUZS += item?.requiredAmount?.floatValue * rateSum
       } else if (item?.material?.currency?.value === 'uzs') {
         materialsTotalPriceUZS += item?.requiredAmount?.floatValue * Number(item?.material?.prices?.floatValue)
       }
     })
 
-    totalPrice['usd'] = bathtubItem?.type?.requiredAmount?.floatValue! * materialsTotalPriceUSD
+    // totalPrice['usd'] = bathtubItem?.type?.requiredAmount?.floatValue! * materialsTotalPriceUSD
     totalPrice['uzs'] = bathtubItem?.type?.requiredAmount?.floatValue! * materialsTotalPriceUZS
 
     return totalPrice
@@ -128,14 +131,6 @@ function BathtubContainer() {
                 </p>
 
                 <p className="w-1/2 text-sm font-medium text-gray-500 group-hover:text-gray-900">
-                  <NumberFormat
-                    displayType={'text'}
-                    thousandSeparator={true}
-
-                    prefix={'$ '}
-                    className="text-sm font-medium text-gray-500 group-hover:text-gray-900"
-                    value={calculatePrice(item).usd} />
-                  &nbsp;|&nbsp;
                   <NumberFormat
                     displayType={'text'}
                     thousandSeparator={true}
