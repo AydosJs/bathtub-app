@@ -12,14 +12,16 @@ function MainContainer({ children }: Props) {
       <div className=" min-w-[320px] w-80 min-h-[100vh] border-r p-6 bg-white h-screen">
         <NavigationContainer />
       </div>
-      <div className="w-full p-6 overflow-y-auto h-screen" style={{ overflowY: "auto" }}>
-        <HeaderComponent />
+      <div className="w-full p-6 overflow-y-auto h-screen flex justify-center" style={{ overflowY: "auto" }}>
+        <div className="w-full max-w-7xl flex flex-col">
+          <HeaderComponent />
 
-        <main className="mt-6" style={{ minHeight: 'calc(100vh - 214px)' }}>
-          {children}
-        </main>
+          <main className="mt-6 " style={{ minHeight: 'calc(100vh - 214px)' }}>
+            {children}
+          </main>
 
-        <FooterComponent />
+          <FooterComponent />
+        </div>
       </div>
     </div>
   )
